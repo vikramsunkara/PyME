@@ -106,9 +106,9 @@ class Hybrid_FSP_solver:
 	def _set_ODE_integrator_(self):
 		if self.model_name == 'HL' :
 
-		    from Hybrid.implicit_ODE_HL_ODE import implicit_black_box as Implicit_solver
-		    from Hybrid.Support_Expander import Hybrid_HL_N_step_expander as HNE
-		    self.Jac = None
+			from Hybrid.implicit_ODE_HL_ODE import implicit_black_box as Implicit_solver
+			from Hybrid.Support_Expander import Hybrid_HL_N_step_expander as HNE
+			self.Jac = None
 
 		else:
 			if self.Jac == None:
@@ -217,11 +217,11 @@ class Hybrid_FSP_solver:
 				% (self.t,self._X.shape[1],1-np.sum(self._w),self.__residual, self.__expanded,np.sum(np.multiply(self._X,self._w),axis=1))) 
 	@property
 	def domain_states(self):
-	    return self._X
+		return self._X
 
 	@property
 	def p(self):
-	    return self._w
+		return self._w
 
 	def plot(self,inter= False):
 		"""
