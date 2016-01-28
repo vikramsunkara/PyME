@@ -12,13 +12,14 @@ import FSP.solver
 
 class OFSP_Solver:
 
-	def __init__(self,model,expander_name,compress_window,step_error):
+	def __init__(self,model,expander_name,compress_window,step_error,validity_test=None):
 		"""
 		@brief OFSP solver for approximation the CME for a given model over time.
 		@param model 			: CMEPY Model Class.
 		@param expander_name 	: str , "SE1" Simple N-step expander.
 		@param compress_window 	: int , number of steps before compressing the domain.
 		@param step_error		: float, global error allowed in the sink state per step.
+		@param validity_test	: func , Validity function on default looking for non negative states
 		"""
 
 		self.model				= model
@@ -34,6 +35,7 @@ class OFSP_Solver:
 		self._state_enum		= None
 		self._solver			= None
 		self._steps_to_compress = 0
+		self.validity_test		= validity_test
 
 		self._initialise_state_space_()
 		self._set_expander_(0.0)
@@ -57,7 +59,7 @@ class OFSP_Solver:
 	def _set_expander_(self,h):
 		if self.expander_name == "SE1": # N-step expander
 			from FSP.simple_expander import SimpleExpander
-			self._expander = SimpleExpander(self.model.transitions, depth=1,)
+			self._expander = SimpleExpander(self.model.transitions, depth=1, validity_test = self.validity_test)
 		elif Expander =='GORDE' : # Gated one reaction expander.
 			from FSP.GORDExpander import GORDE_Algo as GORDE
 			self._expander = GORDE(self.model,h,self.max_error_per_step)

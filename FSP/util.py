@@ -26,6 +26,9 @@ def grow_domain(domain_states, transitions, depth, validity_test = None):
             shifted_states = lexarrayset.shift(domain_states, transition)
             # filter invalid states (ie states with a negative coord)
             valid = validity_test(shifted_states)
+            #import pdb
+            #if numpy.sum(valid) != shifted_states.shape[1]:
+            #    pdb.set_trace()
             shifted_states = shifted_states[:, valid]
             expanded_states = lexarrayset.union(
                 expanded_states,

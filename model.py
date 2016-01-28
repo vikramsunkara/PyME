@@ -255,7 +255,7 @@ def validate_model(m):
     if SHAPE in m:  # An artifact from an older design
         validate_shape(m[SHAPE])
     else: 
-        m[SHAPE] = m[INITIAL_STATE]
+        m[SHAPE] = tuple([1]*len(m[INITIAL_STATE]))
 
     if REACTION_NAMES in m:
         validate_species_names(m[REACTION_NAMES])

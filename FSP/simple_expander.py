@@ -11,7 +11,7 @@ class SimpleExpander(object):
     The domain is expanded along the given transitions, up to the specified
     depth.
     """
-    def __init__(self, transitions, depth):
+    def __init__(self, transitions, depth, validity_test=False):
         """
         Simple FSP expander that expands the entire domain.
     
@@ -23,6 +23,7 @@ class SimpleExpander(object):
         self.Gtau = 0.001
         self.Gtau_default = 0.001
         self.name='SE1'
+        self.valid_func = validity_test
     
     def expand(self, **kwargs):
         """
@@ -31,5 +32,6 @@ class SimpleExpander(object):
         return FSP.util.grow_domain(
             kwargs['domain_states'],
             self.transitions,
-            self.depth
+            self.depth,
+            validity_test = self.valid_func
         )

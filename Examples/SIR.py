@@ -3,8 +3,9 @@
 
 import numpy as np
 
+
 import sys
-sys.path.append('/Users/sunkara/dev/PyME/')
+sys.path.append('/Users/sunkara/dev/PyME/') 
 
 from model import Model 
 
@@ -74,7 +75,7 @@ Initialising a Hybrid solver class. Where we want to consider S to be stochastic
 
 stoc_vector = np.array([True,False])
 
-# Evolving the density a bit forward so that we have a more regular marginal.
+# Evolving the density a bit forward so that we have a regular marginal.
 OFSP_obj = OFSP_Solver(SIR_model,"SE1",50,1e-6)
 OFSP_obj.step(0.01)
 
