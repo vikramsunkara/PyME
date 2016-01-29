@@ -1,6 +1,25 @@
 """
 Silencing RNA model 
 Author:Vikram Sunkara
+
+
+Species
+---------------------
+Gene B : poisiton B in the genome
+sRNA  : Silencing RNA
+mRNA   : mRNA produced by Gene A (Always On)
+A      : Protein A made by mRNA
+
+Reactions
+----------------------
+
+r1 : * -> mRNA
+r2 : mRNA -> A
+r3 : Gene B -> sRNA + Gene B
+r4 : sRNA + mRNA -> *
+r5 : A + Gene B -> A
+r6 : * -> Gene B
+
 """
 
 import numpy as np
@@ -12,7 +31,7 @@ sys.path.append('/Users/sunkara/dev/PyME/')
 
 from model import Model 
 
-ssRNA_model= Model(
+sRNA_model= Model(
     propensities = [lambda *x : 0.1,
                     lambda *x : 0.05*np.maximum(x[2],0.0),
                     lambda *x : 0.02*np.maximum(x[2],0.0)*np.maximum(x[1],0.0),
@@ -44,7 +63,7 @@ def validity_function(X):
 	return np.multiply(on_off,neg_states)
 
 
-OFSP_obj = OFSP_Solver(ssRNA_model,"SE1",5,1e-6,validity_function)
+OFSP_obj = OFSP_Solver(sRNA_model,"SE1",5,1e-6,validity_function)
 
 
 for t in T:
@@ -75,9 +94,14 @@ def Jac_Mat(X,deter_vec,i):
     return mat[deter_vec,:]
 
 stoc_vector = np.array([True,True,False,False])
+"""
+Gene B and sRNA are considered stochastic.
+mRNA and A are considered stochastic.
+
+"""
 
 # evolving the probability forward to gain more regularity.
-OFSP_obj = OFSP_Solver(ssRNA_model,"SE1",50,1e-6)
+OFSP_obj = OFSP_Solver(sRNA_model,"SE1",50,1e-6)
 OFSP_obj.step(1.0)
 
 ####### Hybrid Solver Class ########
@@ -86,7 +110,7 @@ from Hybrid_FSP import Hybrid_FSP_solver
 
 ### Hybrid MRCE Computation
 
-MRCE_obj = Hybrid_FSP_solver(ssRNA_model,stoc_vector,"MRCE",1e-7,jac=Jac_Mat)
+MRCE_obj = Hybrid_FSP_solver(sRNA_model,stoc_vector,"MRCE",1e-7,jac=Jac_Mat)
 MRCE_obj.set_initial_values(OFSP_obj.domain_states,OFSP_obj.p,t=1.0)
 
 for t in T:
@@ -96,8 +120,8 @@ for t in T:
 
 ### Hybrid HL Computation
 
-HL_obj = Hybrid_FSP_solver(SIR_model,stoc_vector,"HL",1e-7)
-HL_obj.set_initial_values(OFSP_obj.domain_states,OFSP_obj.p,t=0.01)
+HL_obj = Hybrid_FSP_solver(sRNA_model,stoc_vector,"HL",1e-7)
+HL_obj.set_initial_values(OFSP_obj.domain_states,OFSP_obj.p,t=1.0)
 for t in T:
 	HL_obj.step(t)
 	HL_obj.print_stats

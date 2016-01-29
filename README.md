@@ -3,6 +3,22 @@ Python Solver for The Chemical Master Equation
 
 ###Requirements:
 
-*Numpy  	> 1.7
-*Scipy  	> 0.15
+*Numpy  	> 1.2
+*SciPy  	> 0.7
 *matplotlib
+
+
+### Download
+```
+git clone https://github.com/vikramsunkara/PyME.git
+```
+
+
+### Installation
+
+
+
+
+
+### Acknowledgment
+The backend code was taken from [CMEPy](https://github.com/fcostin/cmepy) and extended to implement the OFSP and the Hybrid MRCE and HL solvers.
