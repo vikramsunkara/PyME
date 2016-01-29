@@ -3,8 +3,8 @@ Common utility routines for Finite State Projection.
 """
 
 import numpy
-from cme_matrix import non_neg_states
-import lexarrayset
+from pyme.cme_matrix import non_neg_states
+import pyme.lexarrayset as lexarrayset
 
 def grow_domain(domain_states, transitions, depth, validity_test = None):
     """

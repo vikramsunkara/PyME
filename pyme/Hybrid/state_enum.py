@@ -6,9 +6,11 @@ import itertools
 
 import numpy
 
-import domain, lexarrayset, statistics
+import pyme.domain as domain 
+import lexarrayset
+import pyme.statistics as statistics
 
-import pdb
+#import pdb
 
 def create(initial_states):
     """

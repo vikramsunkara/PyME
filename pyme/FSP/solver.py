@@ -3,11 +3,11 @@ An implementation of FSP with compression.
 """
 
 import numpy
-import restorable_solver
-import domain
-import state_enum
+import pyme.restorable_solver as restorable_solver
+import pyme.domain            as domain
+import pyme.state_enum as state_enum
 import exceptions
-import lexarrayset
+import pyme.lexarrayset as lexarrayset
 
 def create(model, domain_states, domain_enum, domain_expander, **kwargs):
     """

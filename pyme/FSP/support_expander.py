@@ -2,9 +2,9 @@
 A solution-support based domain expansion routine for the FSP algorithm.
 """
 
-import cmepy.domain
-import cmepy.fsp.util
-import cmepy.lexarrayset
+import pyme.domain
+import pyme.FSP.util
+import pyme.lexarrayset 
 
 class SupportExpander(object):
     """
@@ -36,12 +36,12 @@ class SupportExpander(object):
         Returns expanded domain states
         """
         p = kwargs['p']
-        support = cmepy.domain.from_iter(p.compress(self.epsilon))
-        expanded_support = cmepy.fsp.util.grow_domain(
+        support = pyme.domain.from_iter(p.compress(self.epsilon))
+        expanded_support = pyme.FSP.util.grow_domain(
             support,
             self.transitions,
             self.depth
         )
         domain_states = kwargs['domain_states']
         #return cmepy.lexarrayset.union(domain_states, expanded_support)
-	return cmepy.lexarrayset.union(domain_states,expanded_support), expanded_support, 0
+	return pyme.lexarrayset.union(domain_states,expanded_support), expanded_support, 0

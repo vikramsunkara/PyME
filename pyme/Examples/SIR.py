@@ -4,10 +4,12 @@
 import numpy as np
 
 
-import sys
-sys.path.append('/Users/sunkara/dev/PyME/') 
+#import sys
+#sys.path.append('/Users/sunkara/dev/PyME/') 
 
-from model import Model 
+import pyme
+
+from pyme.model import Model 
 
 ##### model class #####
 
@@ -31,7 +33,7 @@ T = np.arange(0.01,0.1,delta_t)
 
 ### OFSP Compuation
 
-from OFSP import OFSP_Solver
+from pyme.OFSP import OFSP_Solver
 
 """
 We initialise an OFSP object and then evolve it forward time steps given in T.
@@ -58,7 +60,7 @@ for t in T:
 OFSP_obj.plot_checked()
 
 
-from Hybrid_FSP import Hybrid_FSP_solver
+from pyme.Hybrid_FSP import Hybrid_FSP_solver
 """
 Initialising a Hybrid solver class. Where we want to consider S to be stochastic and I to be deterministic
 
@@ -95,7 +97,7 @@ MRCE_obj.plot_checked()
 
 
 ### Hybrid HL Computation
-from Hybrid_FSP import Hybrid_FSP_solver
+from pyme.Hybrid_FSP import Hybrid_FSP_solver
 stoc_vector = np.array([True,False])
 
 HL_obj = Hybrid_FSP_solver(SIR_model,stoc_vector,"HL",1e-7)

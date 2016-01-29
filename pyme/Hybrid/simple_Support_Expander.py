@@ -79,7 +79,7 @@ class Hybrid_N_step_expander(object):
 	def expand(self,**kwargs):
 	#Returns epanded domain states
 		import lexarrayset
-		from cme_matrix import non_neg_states as validity_test
+		from pyme.cme_matrix import non_neg_states as validity_test
 		import itertools
 		#from util import Concatenate_state_space as CSS # takes list of matricies.
 		#from util import simple_compress as SC # return the compressed vectors and states.

@@ -3,9 +3,9 @@ Python Solver for The Chemical Master Equation
 
 ###Requirements:
 
-*Numpy  	> 1.2
-*SciPy  	> 0.7
-*matplotlib
+* Numpy  	> 1.2
+* SciPy  	> 0.7
+* matplotlib
 
 
 ### Download
@@ -15,9 +15,10 @@ git clone https://github.com/vikramsunkara/PyME.git
 
 
 ### Installation
-
-
-
+In the directory which you have cloned PyME
+```
+python setup.py install
+```
 
 
 ### Acknowledgment

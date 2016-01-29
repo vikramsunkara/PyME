@@ -22,11 +22,13 @@ r6 S + G -> V
 
 import numpy as np
 
-# Set Path
-import sys
-sys.path.append('/Users/sunkara/dev/PyME/') 
+## Set Path 
+#import sys
+#sys.path.append('.') 
 
-from model import Model
+import pyme
+
+from pyme.model import Model
 
 
 ##### CMEPY Model class
@@ -65,17 +67,19 @@ def Jac_Mat(X,deter_vec,i):
 delta_t = 0.1
 T = np.arange(0.005,20.0,delta_t)
 
-
 ### Using the OFSP to generate a regular initial condition.
-from OFSP import OFSP_Solver
+from pyme.OFSP import OFSP_Solver
 
-OFSP_obj = OFSP_Solver(Viral_D_model,"SE1",5,1e-6)
-OFSP_obj.step(0.005)
-OFSP_obj.print_stats
+OFSP_obj = OFSP_Solver(Viral_D_model,"SE1",2,1e-6)
+for i in range(10):
+	OFSP_obj.step(0.0005*(i+1))
+	OFSP_obj.print_stats
+
+OFSP_obj.plot()
 
 ####### Hybrid Solver Class ########
 
-from Hybrid_FSP import Hybrid_FSP_solver
+from pyme.Hybrid_FSP import Hybrid_FSP_solver
 
 ### Hybrid MRCE Computation
 stoc_vector = np.array([True,False,False,True])

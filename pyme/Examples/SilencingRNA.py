@@ -25,11 +25,12 @@ r6 : * -> Gene B
 import numpy as np
 
 # Set Path
-import sys
-sys.path.append('/Users/sunkara/dev/PyME/') 
+#import sys
+#sys.path.append('/Users/sunkara/dev/PyME/') 
 
+import pyme
 
-from model import Model 
+from pyme.model import Model 
 
 sRNA_model= Model(
     propensities = [lambda *x : 0.1,
@@ -54,7 +55,7 @@ T = np.arange(1.0,80,delta_t)
 
 
 ### OFSP Approximation
-from OFSP import OFSP_Solver
+from pyme.OFSP import OFSP_Solver
 
 # This stops the system from growing into areas which have zero probability.
 def validity_function(X):
@@ -106,7 +107,7 @@ OFSP_obj.step(1.0)
 
 ####### Hybrid Solver Class ########
 
-from Hybrid_FSP import Hybrid_FSP_solver
+from pyme.Hybrid_FSP import Hybrid_FSP_solver
 
 ### Hybrid MRCE Computation
 

@@ -137,7 +137,7 @@ class Hybrid_FSP_solver:
 		from Hybrid.proj import project_to_Hybrid as POH
 		from statistics import expectation
 
-		clean = p > 0.0
+		clean = p > 1e-9
 		domain_states = domain_states[:,clean]
 		p = p[clean]
 

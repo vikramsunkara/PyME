@@ -2,7 +2,7 @@
 A simple domain expansion routine for the FSP algorithm.
 """
 
-import FSP.util
+import pyme.FSP.util
 
 class SimpleExpander(object):
     """
@@ -29,7 +29,7 @@ class SimpleExpander(object):
         """
         Returns expanded domain states
         """
-        return FSP.util.grow_domain(
+        return pyme.FSP.util.grow_domain(
             kwargs['domain_states'],
             self.transitions,
             self.depth,
