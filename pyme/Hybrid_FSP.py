@@ -9,16 +9,38 @@ import numpy as np
 import Hybrid.state_enum
 
 class Hybrid_FSP_solver:
+	"""
+	Hybrid FSP solver class 
+
+	Attributes
+	----------------------------
+
+	domain_states : ndarray
+			The states of the hybrid state space with the conditional expectations substituted in the respective positions
+			shape (num of species, num of states)
+	p : ndarray
+			marginal probability vector. shape (num of states)
+	t : float
+			time point of the solver
+	print_stats : List
+			some statistics of where the solver is at
+
+	"""
 
 	def __init__(self,model,stoc_vector,model_name,sink_error,jac=None):
 		"""
-		@brief Hybrid_FSP_Solver which can compute MRCE and HL hybrid approximations for a given model. 
+		Hybrid_FSP_Solver which can compute MRCE and HL hybrid approximations for a given model. 
 
-		@param model 		: model.Model. 
-		@param stoc_vector 	: numpy.ndarray.  
-		@param model_name 	: str, 'MRCE' or 'HL'.
-		@param sink_error 	: float, maximum error allowed in the sink state.
-		@param jac 			: (List of Functions), The jacobian of the propensity functions.
+		Parameters
+		----------------------------------
+		model 		: model.Model
+		stoc_vector : numpy.ndarray  
+		model_name 	: str
+						 	'MRCE' or 'HL'.
+		sink_error 	: float
+							 maximum error allowed in the sink state.
+		jac 		: (List of Functions)
+							 The jacobian of the propensity functions.
 		
 		@return Hybrid_FSP_Solver	
 		"""
@@ -124,10 +146,16 @@ class Hybrid_FSP_solver:
 
 	def set_initial_values(self,domain_states,p,t = 0.0):
 		"""
-		@brief initialise the hybrid solver with the OFSP state space and probabiltiy. The function will automatically do the projection.
-		@param domain_states 	: numpy.ndarray, shape = (num of species x num of states)
-		@param p 				: numpy.ndarray, shape = (num of states,)
-		@param t 				: numpy.ndarray, Default = 0.0
+		initialise the hybrid solver with the OFSP state space and probabiltiy. The function will automatically do the projection.
+
+		Parameters
+		----------------------
+		domain_states 	: numpy.ndarray
+							shape = (num of species x num of states)
+		p 				: numpy.ndarray
+							shape = (num of states,)
+		t 				: numpy.ndarray
+							Default = 0.0
 		"""
 
 		from Hybrid.Support_Expander import positions
@@ -155,10 +183,16 @@ class Hybrid_FSP_solver:
 
 	def step(self,t_final,sink_error=None,fine_res=1):
 		"""
-		@brief step function which evolves the solver forward.
-		@param t_final 		: float, The time point to evolve the solver to
-		@param sink_error 	: float, By defult is the chosen at the start, however, it can be adjusted in between steps.
-		@param fine_res 	: int, [Caution] Feature not working yet. 
+		step function which evolves the solver forward.
+
+		Parameters
+		---------------------
+		t_final 		: float
+							The time point to evolve the solver to
+		sink_error 		: float
+							By defult is the chosen at the start, however, it can be adjusted in between steps.
+		@param fine_res : int
+						 	[Caution] Feature not working yet. 
 		"""
 
 		from Hybrid.Hybrid_FSP import Hybrid_FSP
@@ -215,6 +249,7 @@ class Hybrid_FSP_solver:
 	def print_stats(self):
 		print(" t : %6.4f | states : %4d | prob(l) : %4.3e | residue in Sink : %4.2e  | Expanded : %3d | Mean: %s" 
 				% (self.t,self._X.shape[1],1-np.sum(self._w),self.__residual, self.__expanded,np.sum(np.multiply(self._X,self._w),axis=1))) 
+		return self.t,self._X.shape[1],1-np.sum(self._w),self.__residual, self.__expanded,np.sum(np.multiply(self._X,self._w),axis=1)
 	@property
 	def domain_states(self):
 		return self._X
@@ -225,24 +260,31 @@ class Hybrid_FSP_solver:
 
 	def plot(self,inter= False):
 		"""
-		@param inter :bool, Interactive mode. If true, then the picture is redrawn in the exisiting figure.
+		inter : bool
+			 Interactive mode. If true, then the picture is redrawn in the exisiting figure.
 		"""
 		from plotters import plot_marginals
 		plot_marginals(self._X.T,self._w,"Hybrid Using :"+self.model_name,self.t,labels=self.model.species,interactive=inter)
 
 	
-	def check_point(self):
+	def check_point(self,filename=None):
 		"""
-		@brief check_point stores the current state space and the marginal probabilty.
+		check_point stores the current state space and the marginal probabilty.
 		"""
 
 		self._stored_X.append(self._X)
 		self._stored_t.append(self.t)
 		self._stored_w.append(self._w)
 
+		if filename != None:
+			import pickle
+			f = open(filename,'wb')
+			pickle.dump({"t":self.t,"domain_states":self.domain_states,"p":self.p,"stoc_vector":self.stoc_vector,"model":self.model_name},f)
+			f.close()
+
 	def plot_checked(self):
 		"""
-		@brief plot_checked plots the expectations of the data check pointed.
+		plot_checked plots the expectations of the data check pointed.
 		"""
 		import pylab as pl
 		pl.ioff()
@@ -282,8 +324,10 @@ class Hybrid_FSP_solver:
 
 	def probe_states(self,X):
 		"""
-		@brief probe_states when called a set of states the corresponding probabilties are stored away. Later can be viewed using (self.plot_checked())
-		@param X :numpy.ndarray,  shape = (num species, num states) 
+		probe_states when called a set of states the corresponding probabilties are stored away. Later can be viewed using (self.plot_checked())
+
+		X :numpy.ndarray
+			  shape = (num species, num states) 
 		"""
 
 		non_zero_probs = self.domain_enum.contains(X)

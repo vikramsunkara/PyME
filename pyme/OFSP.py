@@ -11,15 +11,43 @@ import FSP.solver
 
 
 class OFSP_Solver:
+	"""
+	Attributes
+	------------------------
 
-	def __init__(self,model,expander_name,compress_window,step_error,validity_test=None):
+	domain_states : ndarray 
+		the states that the density is being computed over. They are stacked in a matrix of shape (num species, num states)
+
+	p : ndarray
+		the probability density vector. shape (num states,).
+
+	t : float
+	    time at which the solver is at.
+	
+	sink : float
+		amount of probability that has accumulated in the sink state.
+
+	print_stats : list
+		a list of statistics that the solver is at.
+		[ time , num of state, prob in sink, number of steps to compression ].
+
+	"""
+
+	def __init__(self,model,compress_window,step_error,expander_name="SE1",validity_test=None):
 		"""
-		@brief OFSP solver for approximation the CME for a given model over time.
-		@param model 			: CMEPY Model Class.
-		@param expander_name 	: str , "SE1" Simple N-step expander.
-		@param compress_window 	: int , number of steps before compressing the domain.
-		@param step_error		: float, global error allowed in the sink state per step.
-		@param validity_test	: func , Validity function on default looking for non negative states
+		OFSP solver for solving the CME for a given model over time.
+
+		Parameters
+		------------------------
+		model 			: CMEPY Model Class
+		compress_window : int , 
+							number of steps before compressing the domain.
+		step_error		: float, 
+							global error allowed in the sink state per step.
+		expander_name 	: str , 
+							"SE1" Simple N-step expander.
+		validity_test	: func , 
+							Validity function is by default looking for non negative states
 		"""
 
 		self.model				= model
@@ -88,8 +116,9 @@ class OFSP_Solver:
 
 	def step(self,t):
 		"""
-		@brief step : evolves the density forward to the time point t. ..warning : The underlying scipy ODE solver is not great, please take small time steps.
-		@param t : float  
+		step Evolves the density forward to the time point t. ..warning : The underlying scipy ODE solver is not great, please take small time steps.
+		
+		t : float  
 
 		"""
 		self._set_expander_(t-self.t)
@@ -108,7 +137,8 @@ class OFSP_Solver:
 
 	def plot(self,inter=False):
 		"""
-		@param inter :(Boolean) Interactive mode. If true, then the picture is redrawn in the exisiting figure.
+		inter : Boolean
+			 Interactive mode. If true, then the picture is redrawn in the exisiting figure.
 		"""
 		from plotters import plot_marginals
 		plot_marginals(self.domain_states.T,self.p,"OFSP Using :"+self.expander_name,self.t,labels=self.model.species,interactive=inter)
@@ -131,14 +161,25 @@ class OFSP_Solver:
 	@property
 	def print_stats(self):
 		print(" t : %6.4f | states : %4d | prob(in sink) : %4.3e | Steps to Compress : %3d " 
-				% (self.t,self.domain_states.shape[1],1-np.sum(self.p),self.compress_window-self._steps_to_compress)) 
-	def check_point(self):
+				% (self.t,self.domain_states.shape[1],1-np.sum(self.p),self.compress_window-self._steps_to_compress))
+		return self.t,self.domain_states.shape[1],1-np.sum(self.p),self.compress_window-self._steps_to_compress
 
+	def check_point(self,filename=None):
+		
 		self._stored_domain_states.append(self.domain_states)
 		self._stored_t.append(self.t)
 		self._stored_p.append(self.p)
 
+		if filename != None:
+			import pickle
+			f = open(filename,'wb')
+			pickle.dump({"t":self.t, "domain_states":self.domain_states, "p":self.p},f)
+			f.close()
 
+	@property
+	def sink(self):
+	    return 1.0-np.sum(self.p)
+	
 	### WARNING TO NOT USE, PYTHON STILL DOES NOT KNOW HOW TO STORE THE PROPENSITY FUNCTIONS IN THE MODEL object.
 	def stash(self,location,name):
 		"""
@@ -190,8 +231,9 @@ class OFSP_Solver:
 
 	def probe_states(self,X):
 		"""
-		@brief probe_states when called a set of states the corresponding probabilties are stored away. Later can be viewed using (self.plot_checked())
-		@param X :numpy.ndarray,  shape = (num species, num states) 
+		probe_states, when called a set of states the corresponding probabilties are stored away. Later can be viewed using (self.plot_checked())
+		X :numpy.ndarray
+			shape = (num species, num states) 
 		"""
 
 		# We use the hash class to find the positions of the states to probe in the domain_states.
