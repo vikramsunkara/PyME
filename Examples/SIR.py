@@ -36,18 +36,24 @@ T = np.arange(0.01,0.1,delta_t)
 from pyme.OFSP import OFSP_Solver
 
 """
-We initialise an OFSP object and then evolve it forward time steps given in T.
+	def __init__(self,model,compress_window,step_error,expander_name="SE1",validity_test=None):
 
-	def __init__(self,model,expander_name,compress_window,step_error):
+		OFSP solver for solving the CME for a given model over time.
 
-		@param model 			: model.Model.
-		@param expander_name 	: str , "SE1" Simple N-step expander.
-		@param compress_window 	: int , number of steps before compressing the domain.
-		@param step_error		: float, global error allowed in the sink state per step.
-
-
+		Parameters
+		------------------------
+		model 			: CMEPY Model Class
+		compress_window : int , 
+							number of steps before compressing the domain.
+		step_error		: float, 
+							global error allowed in the sink state per step.
+		expander_name 	: str , 
+							"SE1" Simple N-step expander.
+		validity_test	: func , 
+							Validity function is by default looking for non negative states
 """
-OFSP_obj = OFSP_Solver(SIR_model,"SE1",50,1e-6)
+
+OFSP_obj = OFSP_Solver(SIR_model,50,1e-6,expander_name="SE1")
 
 for t in T:
 	OFSP_obj.step(t)

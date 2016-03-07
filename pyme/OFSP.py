@@ -88,9 +88,11 @@ class OFSP_Solver:
 		if self.expander_name == "SE1": # N-step expander
 			from FSP.simple_expander import SimpleExpander
 			self._expander = SimpleExpander(self.model.transitions, depth=1, validity_test = self.validity_test)
-		elif Expander =='GORDE' : # Gated one reaction expander.
+		'''	
+		elif self.expander_name =='GORDE' : # Gated one reaction expander.
 			from FSP.GORDExpander import GORDE_Algo as GORDE
 			self._expander = GORDE(self.model,h,self.max_error_per_step)
+		'''
 
 	def _make_solver(self):
 		self._solver=FSP.solver.create(

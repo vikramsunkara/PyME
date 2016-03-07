@@ -64,7 +64,7 @@ def validity_function(X):
 	return np.multiply(on_off,neg_states)
 
 
-OFSP_obj = OFSP_Solver(sRNA_model,"SE1",5,1e-6,validity_function)
+OFSP_obj = OFSP_Solver(sRNA_model,5,1e-6,expander_name="SE1",validity_test=validity_function)
 
 
 for t in T:
@@ -102,7 +102,7 @@ mRNA and A are considered stochastic.
 """
 
 # evolving the probability forward to gain more regularity.
-OFSP_obj = OFSP_Solver(sRNA_model,"SE1",50,1e-6)
+OFSP_obj = OFSP_Solver(sRNA_model,50,1e-6,expander_name="SE1")
 OFSP_obj.step(1.0)
 
 ####### Hybrid Solver Class ########

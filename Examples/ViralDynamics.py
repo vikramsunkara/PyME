@@ -70,7 +70,7 @@ T = np.arange(0.005,20.0,delta_t)
 ### Using the OFSP to generate a regular initial condition.
 from pyme.OFSP import OFSP_Solver
 
-OFSP_obj = OFSP_Solver(Viral_D_model,"SE1",2,1e-6)
+OFSP_obj = OFSP_Solver(Viral_D_model,2,1e-6,expander_name="SE1")
 for i in range(10):
 	OFSP_obj.step(0.0005*(i+1))
 	OFSP_obj.print_stats
