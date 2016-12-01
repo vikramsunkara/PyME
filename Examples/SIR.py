@@ -28,7 +28,7 @@ SIR_model = Model(	propensities = [ lambda *x : 0.3*np.maximum(x[0],0.0)*np.maxi
 
 
 delta_t = 0.001
-T = np.arange(0.01,0.1,delta_t)
+T = np.arange(0.01,0.4,delta_t)
 
 
 ### OFSP Compuation

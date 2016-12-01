@@ -101,7 +101,8 @@ class OFSP_Solver:
 		self._state_enum,
 		self._expander,
 		p_0 = self.p,
-		t_0 = self.t
+		t_0 = self.t,
+		validity_test = self.validity_test
 		)
 
 	def _compress_domain(self):
@@ -181,6 +182,30 @@ class OFSP_Solver:
 	@property
 	def sink(self):
 	    return 1.0-np.sum(self.p)
+
+	@property
+	def expectation(self):
+		"""
+		Conputes the expectation at the current time point
+		"""
+		return np.sum(np.multiply(self.domain_states,self.p[np.newaxis,:]),axis=1)
+
+	@property
+	def covariance(self):
+		"""
+		Conputes the covariance matrix at the current time point
+		"""
+		N = self.domain_states.shape[1]
+		D = self.domain_states.shape[0]
+		# Initialise the return matrix
+		cov = np.zeros((D,D))
+		exp = self.expectation
+		# Sadly I do not know how to do this in a vectorised way, I am open to suggestions :)
+		for i in range(N):
+			diff = self.domain_states[:,i] - exp
+			cov += diff.dot(diff.T)*self.p[i]
+		return cov
+
 	
 	### WARNING TO NOT USE, PYTHON STILL DOES NOT KNOW HOW TO STORE THE PROPENSITY FUNCTIONS IN THE MODEL object.
 	def stash(self,location,name):

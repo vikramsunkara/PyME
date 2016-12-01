@@ -22,7 +22,8 @@ def create(model,
            sink_0=None,
            time_dependencies=None,
            domain_states=None,
-           domain_enum=None):
+           domain_enum=None,
+           validity_test= None):
     """
     Returns a solver for the Chemical Master Equation of the given model.
 
@@ -109,6 +110,9 @@ def create(model,
     if domain_enum is None:
         raise ValueError('domain_enum must be explicitly specified')
 
+    if validity_test is None:
+        validity_test = cme_matrix.non_neg_states
+
     if t_0 is None:
         t_0 = 0.0
 
@@ -117,7 +121,7 @@ def create(model,
         model,
         domain_enum,
         sink,
-        cme_matrix.non_neg_states
+        validity_test
     )
     reaction_matrices = list(gen_matrices)
     dy_dt = cme_matrix.create_diff_eqs(

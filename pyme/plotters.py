@@ -38,7 +38,7 @@ def plot_marginals(state_space,p,name,t,labels = False,interactive = False):
 		pl.tight_layout()
 		pl.show()
 	
-def plot_2D_heat_map(states,p,labels):
+def plot_2D_heat_map(states,p,labels, inter=False):
 	import pylab as pl
 	X = np.unique(states[0,:])
 	Y = np.unique(states[1,:])
@@ -51,12 +51,15 @@ def plot_2D_heat_map(states,p,labels):
 	pl.imshow(Z.T, origin='lower')
 	pl.xlabel(labels[0])
 	pl.ylabel(labels[1])
-	pl.draw()
+	if inter== True:
+		pl.draw()
+	else:
+		pl.show()
 
-def plot_2D_contour(states,p,labels):
+def plot_2D_contour(states,p,labels,inter=False):
 	import pylab as pl
 	
-	from cmepy.statistics import expectation as EXP
+	from pyme.statistics import expectation as EXP
 	exp = EXP((states,p)) 
 	X = np.unique(states[0,:])
 	Y = np.unique(states[1,:])
@@ -65,6 +68,8 @@ def plot_2D_contour(states,p,labels):
 	Z = np.zeros((X.max()+1,Y.max()+1))
 	for i in range(len(p)):
 		Z[states[0,i],states[1,i]] = p[i]
+
+	Z = np.where(Z < 1e-8,0.0,Z)
 	pl.clf()
 	XX, YY = np.meshgrid(X,Y)	
 	pl.contour(range(X.max()+1),range(Y.max()+1),Z.T)
@@ -72,4 +77,7 @@ def plot_2D_contour(states,p,labels):
 	pl.axvline(x=exp[0])
 	pl.xlabel(labels[0])
 	pl.ylabel(labels[1])
-	pl.draw()
+	if inter == True:
+		pl.draw()
+	else:
+		pl.show()

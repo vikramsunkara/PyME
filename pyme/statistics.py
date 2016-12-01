@@ -363,8 +363,8 @@ def _metavariance(p, exponent):
         diffs **= exponent
     product = numpy.multiply.reduce(diffs, axis = 0)
     alpha = expectation((product, probabilities))
-    assert alpha.shape == (1, )
-    return alpha[0]
+    #assert alpha.shape == (1, )
+    return alpha
     
     
 def variance(p):

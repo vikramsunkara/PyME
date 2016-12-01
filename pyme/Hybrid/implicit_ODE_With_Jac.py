@@ -24,10 +24,7 @@ def derivative_G(propensities,V,X,w,deter_vector,stoc_positions, positions, vali
 							  )*map(propensities[i],* X[:,positions[valid[:,j]][:,j]])*w[positions[valid[:,j]][:,j]]
 				
 				# Correction terms
-				
 				# x terms
-				#import pdb
-				#pdb.set_trace()
 				temp_eta[:,:] -= jac(X,deter_vector,i)*w[np.newaxis,:] # these should be all the terms which are minusing out.
 				# x-v_j term.
 				temp_eta[:,valid[:,j]] += jac(X[:,positions[valid[:,j]][:,j]],deter_vector,i)*w[positions[valid[:,j]][:,j]][np.newaxis,:]
