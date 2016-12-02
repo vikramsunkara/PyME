@@ -75,7 +75,7 @@ def implicit_black_box(propensities,V,X,w,h,deter_vector,stoc_positions, positio
 	X[deter_vector,:] = deter_ode.y.reshape(( np.sum(deter_vector),X.shape[1]))
 	
 	## Another adjust to compensate for non negative
-	#X = np.where(X < 0.0,0.0,X)
+	X = np.where(X < 0.0,0.0,X)
 
 	
 	return X

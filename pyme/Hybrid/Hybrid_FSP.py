@@ -99,10 +99,10 @@ def Hybrid_FSP(model, X, w, h, position, valid, stoc_vector, expander, tau, resi
 		
 		## Baised compress
 		#keep_states, keep_prob = compress( new_X[:,negative_dot],ode_obj.y[:-1][negative_dot], 0.0*tau) # No reduction.
-		keep_states, keep_prob = compress( new_X[:,negative_dot],ode_obj.y[:-1][negative_dot], tau)
+		#keep_states, keep_prob = compress( new_X[:,negative_dot],ode_obj.y[:-1][negative_dot], tau)
 		
 		## non biased compress##
-		#shrunck_X, shrunck_w = compress( new_X,ode_obj.y, 0.0001*tau)
+		keep_states, keep_prob = compress( new_X,ode_obj.y, 0.1*tau)
 		
 		#pdb.set_trace()
 		if keep_states.shape[1] < np.sum(negative_dot):
@@ -111,9 +111,9 @@ def Hybrid_FSP(model, X, w, h, position, valid, stoc_vector, expander, tau, resi
 			#print(" Reducing the Hybrid Domain by : %d states."%(np.sum(negative_dot) - keep_states.shape[1]))
 			
 			# we have a reduction, so we adjust the indicies.
-			shrunck_X = np.concatenate((new_X[:,positive_dot],keep_states), axis=1)
+			shrunck_X = keep_states #np.concatenate((new_X[:,positive_dot],keep_states), axis=1)
 			
-			shrunck_w = np.concatenate((ode_obj.y[positive_dot],keep_prob))
+			shrunck_w = keep_prob #np.concatenate((ode_obj.y[positive_dot],keep_prob))
 			
 			# need to reindex everything and generate new positions.
 			

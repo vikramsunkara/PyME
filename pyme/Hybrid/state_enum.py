@@ -37,7 +37,7 @@ class StateEnum(object):
         self.offset = 0
         self.unordered_full_dom = initial_states
         self.ordered_full_dom = None
-        if stoc_vec == None:
+        if stoc_vec is None:
             self.reinitialise(initial_states)
         else:
             self.reinitialise(initial_states[stoc_vec,:])
@@ -97,7 +97,7 @@ class StateEnum(object):
         returns an array of the enumeration indices for the
         states stored in the array 'states'.
         """
-        if self.stoc_vec == None:
+        if self.stoc_vec is None:
             states = numpy.asarray(states)
         else:
             states = numpy.asarray(states[self.stoc_vec,:])
@@ -141,7 +141,7 @@ class StateEnum(object):
         states stored in the array 'states' are contained in the
         state enumeration.
         """
-        if self.stoc_vec == None:
+        if self.stoc_vec is None:
             states = numpy.asarray(states)
         else:
             states = numpy.asarray(states[self.stoc_vec,:])
